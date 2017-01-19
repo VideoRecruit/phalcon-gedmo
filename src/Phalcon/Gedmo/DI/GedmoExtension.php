@@ -6,7 +6,6 @@ use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Gedmo\Mapping\MappedEventSubscriber;
 use Phalcon\Config;
 use Phalcon\Di;
-use Phalcon\DiInterface;
 use VideoRecruit\Phalcon\DI\Container;
 use VideoRecruit\Phalcon\Doctrine\DI\DoctrineOrmExtension;
 use VideoRecruit\Phalcon\Events\DI\EventsExtension;
@@ -51,10 +50,10 @@ class GedmoExtension
 	/**
 	 * GedmoExtension constructor.
 	 *
-	 * @param DiInterface $di
+	 * @param Container $di
 	 * @param array|Config $config
 	 */
-	public function __construct(DiInterface $di, $config)
+	public function __construct(Container $di, $config)
 	{
 		$this->di = $di;
 
@@ -77,11 +76,11 @@ class GedmoExtension
 	}
 
 	/**
-	 * @param DiInterface $di
+	 * @param Container $di
 	 * @param array|Config $config
 	 * @return GedmoExtension
 	 */
-	public static function register(DiInterface $di, $config = NULL)
+	public static function register(Container $di, $config = NULL)
 	{
 		return new self($di, $config ?: []);
 	}
