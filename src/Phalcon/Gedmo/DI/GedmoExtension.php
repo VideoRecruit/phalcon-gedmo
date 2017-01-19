@@ -70,7 +70,7 @@ class GedmoExtension
 			throw new InvalidStateException('Events extension was not found. Did you register it before?');
 		}
 
-		$config = array_merge($config, $this->defaults);
+		$config = array_merge($this->defaults, $config);
 
 		$this->loadExtensions($config);
 	}
