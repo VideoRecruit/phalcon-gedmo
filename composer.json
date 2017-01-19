@@ -16,5 +16,13 @@
         "videorecruit/phalcon-doctrine": "~1.0",
         "videorecruit/phalcon-events": "~0.1",
         "videorecruit/phalcon-di-tags": "~0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "VideoRecruit\\": "src/"
+        },
+        "classmap": [
+            "src/Phalcon/Gedmo/exceptions.php"
+        ]
     }
 }
