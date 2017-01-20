@@ -2,8 +2,6 @@
 
 namespace VideoRecruit\Phalcon\Gedmo\DI;
 
-use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
-use Gedmo\Mapping\MappedEventSubscriber;
 use Phalcon\Config;
 use Phalcon\Di;
 use VideoRecruit\Phalcon\DI\Container;
@@ -91,21 +89,25 @@ class GedmoExtension
 	private function loadExtensions(array $config)
 	{
 		// add listeners which are switched ON to the DI
-		foreach (self::$availableAnnotations as $annotation => $listener) {
+		foreach (self::$availableAnnotations as $annotation => $listenerClassName) {
 			if ($config[$annotation] !== TRUE) {
 				continue;
 			}
 
-			$this->di->setShared(self::LISTENER_PREFIX . $annotation, function () use ($listener) {
-				/** @var AnnotationDriver $driver */
-				$driver = $this->get(DoctrineOrmExtension::METADATA_DRIVER);
-
-				/** @var MappedEventSubscriber $listener */
-				$listener = new $listener();
-				$listener->setAnnotationReader($driver->getReader());
-
-				return $listener;
-			}, EventsExtension::TAG_SUBSCRIBER);
+			$this->di->setShared(self::LISTENER_PREFIX . $annotation, [
+				'className' => $listenerClassName,
+				'calls' => [
+					[
+						'method' => 'setAnnotationReader',
+						'arguments' => [
+							[
+								'type' => 'service',
+								'name' => DoctrineOrmExtension::METADATA_READER,
+							],
+						],
+					],
+				],
+			], EventsExtension::TAG_SUBSCRIBER);
 		}
 	}
 }
